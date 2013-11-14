@@ -262,6 +262,8 @@ public class tutorLoadGrade {
 
 	}
 
+	
+	
 	public void select(int choice) {
 		Scanner scan = new Scanner(System.in);
 		String ans = null;
@@ -369,10 +371,28 @@ public class tutorLoadGrade {
 		System.out.println("0.\t End");
 
 		System.out.println("Select the choice: ");
-		int choice = scan.nextInt();
-		select(choice);
+		String choice = scan.nextLine();
+		
+		if (isInteger(choice)) {
+			select(Integer.parseInt(choice));
+		} else {
+			printUI();
+		}
+		
 
 		return false;
+	}
+	
+	public static boolean isInteger(String str) {
+		int size = str.length();
+
+		for (int i = 0; i < size; i++) {
+			if (!Character.isDigit(str.charAt(i))) {
+				return false;
+			}
+		}
+
+		return size > 0;
 	}
 	
     public String saveMap(JFrame f) {

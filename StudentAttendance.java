@@ -108,8 +108,15 @@ public class StudentAttendance {
 		System.out.println("0.\t Exit Program");
 
 		System.out.println("Select the choice: ");
-		int choice = scan.nextInt();
-		select(choice);
+		
+		
+		String choice = scan.nextLine();
+		if (isInteger(choice)) {
+			select(Integer.parseInt(choice));
+		} else {
+			printUI();
+		}
+		
 
 	}
 
@@ -263,4 +270,15 @@ public class StudentAttendance {
 	    
 	}
 
+	public static boolean isInteger(String str) {
+		int size = str.length();
+
+		for (int i = 0; i < size; i++) {
+			if (!Character.isDigit(str.charAt(i))) {
+				return false;
+			}
+		}
+
+		return size > 0;
+	}
 }
