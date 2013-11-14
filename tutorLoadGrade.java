@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -6,6 +7,10 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Scanner;
+
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class tutorLoadGrade {
 
@@ -260,10 +265,12 @@ public class tutorLoadGrade {
 	public void select(int choice) {
 		Scanner scan = new Scanner(System.in);
 		String ans = null;
+		
+		JFrame j = new JFrame();
 		switch (choice) {
 		case 1:
 			System.out.println("Enter the file path you want to import?");
-			ans = scan.nextLine();
+			ans = saveMap(j);
 
 			System.out.println("Enter the name of the course?");
 			String cs = scan.nextLine();
@@ -366,6 +373,27 @@ public class tutorLoadGrade {
 		select(choice);
 
 		return false;
+	}
+	
+    public String saveMap(JFrame f) {
+	    JFileChooser chooser = new JFileChooser();
+	    chooser.setCurrentDirectory(new File("/Users/Derrick/Desktop/School/PSD3/forTest/"));
+	    FileNameExtensionFilter filter = new FileNameExtensionFilter(
+	            "CSV", "csv");
+	    chooser.setFileFilter(filter);
+	    int retrival = chooser.showOpenDialog(f);
+	    if (retrival == JFileChooser.APPROVE_OPTION) {
+	        try {
+	           return chooser.getSelectedFile().getAbsolutePath();
+
+	        } catch (Exception ex) {
+	            ex.printStackTrace();
+	        }
+	    }
+	  
+		return null;
+	    
+	    
 	}
 
 }

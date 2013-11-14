@@ -1,10 +1,15 @@
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Scanner;
+
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class StudentAttendance {
 
@@ -14,10 +19,11 @@ public class StudentAttendance {
 
 	public void select(int s) {
 		Scanner scan = new Scanner(System.in);
+		JFrame j = new JFrame();
 		switch (s) {
 		case 1:
 			System.out.println("Enter the url for the file you want to import");
-			String url = scan.nextLine();
+			String url = saveMap(j);
 
 			System.out.println("Enter the name: ");
 			String name = scan.nextLine();
@@ -234,6 +240,27 @@ public class StudentAttendance {
 		for (String name : student) {
 			System.out.println("Student : " + name);
 		}
+	}
+	
+    public String saveMap(JFrame f) {
+	    JFileChooser chooser = new JFileChooser();
+	    chooser.setCurrentDirectory(new File("/usr/local"));
+	    FileNameExtensionFilter filter = new FileNameExtensionFilter(
+	            "CSV", "csv");
+	    chooser.setFileFilter(filter);
+	    int retrival = chooser.showOpenDialog(f);
+	    if (retrival == JFileChooser.APPROVE_OPTION) {
+	        try {
+	           return chooser.getSelectedFile().getAbsolutePath();
+
+	        } catch (Exception ex) {
+	            ex.printStackTrace();
+	        }
+	    }
+	  
+		return null;
+	    
+	    
 	}
 
 }

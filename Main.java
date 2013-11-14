@@ -1,5 +1,7 @@
 import java.util.Scanner;
 
+
+
 public class Main {
 
 	public static void main(String[] args) {
@@ -35,7 +37,7 @@ public class Main {
 			case 2:
 				sa.printUI();
 				break;
-				
+
 			case 3:
 				i = 0;
 				System.out.println("Thank you and Good bye!");
@@ -44,6 +46,7 @@ public class Main {
 			}
 
 		}
+
 	}
 
 }
