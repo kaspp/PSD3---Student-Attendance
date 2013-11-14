@@ -88,23 +88,39 @@ public class StudentAttendance {
 			displayAttendance(coursea);
 			printUI();
 			break;
+			
+		case 7:
+			displayAllCourse();
+			System.out.println("Which lesson do you want to view?");
+			coursea = scan.nextLine();
+			
+			viewSA(coursea);
+			printUI();
+			break;
 
-		default:
+		case 0:
 			System.out.println("Exit program");
+			break;
+		default:
+			System.out.println("Invalid Selection");
+			printUI();
 			break;
 		}
 	}
 
 	public void printUI() {
 
+		int i = 0;
 		Scanner scan = new Scanner(System.in);
 		System.out.println("Please choose something to do");
-		System.out.println("1.\t Import attendance");
-		System.out.println("2.\t Edit attendance");
-		System.out.println("3.\t Delete attendance");
-		System.out.println("4.\t Show student");
-		System.out.println("5.\t Show sessions");
-		System.out.println("6.\t Mark Late Student");
+		System.out.println(++i + ".\t Import attendance");
+		System.out.println(++i + ".\t Edit attendance");
+		System.out.println(++i +".\t Delete attendance");
+		System.out.println(++i +".\t Show student");
+		System.out.println(++i +".\t Show sessions");
+		System.out.println(++i +".\t Mark Late Student");
+		System.out.println(++i + ".\t View Student attendance");
+		
 		System.out.println("0.\t Exit Program");
 
 		System.out.println("Select the choice: ");
@@ -118,6 +134,14 @@ public class StudentAttendance {
 		}
 		
 
+	}
+	
+	public void viewSA(String coursea) {
+		Map<String, String> session = course.get(coursea);
+		
+		for (String n : student) {
+			System.out.println(n + " " + session.get(n));
+		}
 	}
 
 	public void markLate(String coursea, String studentn) {
@@ -236,7 +260,7 @@ public class StudentAttendance {
 				if (br != null)
 					br.close();
 			} catch (IOException ex) {
-				ex.printStackTrace();
+				System.out.println("Reading Fail!");
 				return false;
 			}
 		}
@@ -251,7 +275,7 @@ public class StudentAttendance {
 	
     public String saveMap(JFrame f) {
 	    JFileChooser chooser = new JFileChooser();
-	    chooser.setCurrentDirectory(new File("/usr/local"));
+	    chooser.setCurrentDirectory(new File("/Users/Derrick/Desktop/School/PSD3/forTest/"));
 	    FileNameExtensionFilter filter = new FileNameExtensionFilter(
 	            "CSV", "csv");
 	    chooser.setFileFilter(filter);

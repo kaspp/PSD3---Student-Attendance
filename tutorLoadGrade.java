@@ -272,7 +272,10 @@ public class tutorLoadGrade {
 		switch (choice) {
 		case 1:
 			System.out.println("Enter the file path you want to import?");
+			j.toFront();
 			ans = saveMap(j);
+			j.toBack();
+		
 
 			System.out.println("Enter the name of the course?");
 			String cs = scan.nextLine();
@@ -348,8 +351,13 @@ public class tutorLoadGrade {
 			printUI();
 			break;
 			
-		default:
+		case 0:
 			System.out.println("End Program!");
+			break;
+			
+		default:
+			System.out.println("Invalid Selection");
+			printUI();
 			break;
 
 		}
@@ -358,16 +366,17 @@ public class tutorLoadGrade {
 
 	public boolean printUI() {
 		Scanner scan = new Scanner(System.in);
+		int i = 0;
 		System.out.println("Please choose something to do");
-		System.out.println("1.\t Import single grades");
-		System.out.println("2.\t Manually Insert Grades");
-		System.out.println("3.\t View Single Course Grades");
-		System.out.println("4.\t View All Course Grades");
-		System.out.println("5.\t Export All grades");
-		System.out.println("6.\t Export student grades");
-		System.out.println("7.\t Export subject grades");
-		System.out.println("8.\t Edit student grades");
-		System.out.println("9.\t Delete grades");
+		System.out.println(++i +".\t Import single grades");
+		System.out.println(++i +".\t Manually Insert Grades");
+		System.out.println(++i +".\t View Single Course Grades");
+		System.out.println(++i +".\t View All Course Grades");
+		System.out.println(++i +".\t Export All grades");
+		System.out.println(++i +".\t Export student grades");
+		System.out.println(++i +".\t Export subject grades");
+		System.out.println(++i +".\t Edit student grades");
+		System.out.println(++i +".\t Delete grades");
 		System.out.println("0.\t End");
 
 		System.out.println("Select the choice: ");
