@@ -56,6 +56,7 @@ public class tutorLoadGrade {
 
 		System.out.println("What document are you grading?");
 		String doc = sc.nextLine();
+		course.add(doc);
 
 		for (String s : student) {
 			System.out.println("What is the grade for " + s + "? ");
@@ -66,24 +67,32 @@ public class tutorLoadGrade {
 
 		int i = 0;
 		while (i == 0) {
-			System.out.println("Is there any other student you want to add?");
+			System.out
+					.println("Is there any other student you want to add? (yes | no)");
 			String ans = sc.nextLine();
 
 			if (ans.equals("Yes") || ans.equals("yes") || ans.equals("y")
 					|| ans.equals("Y")) {
 				System.out.println("Name of student?");
 				ans = sc.nextLine();
+				student.add(ans);
 
 				System.out.println("What is the grade for " + ans + "?");
 				String g = sc.nextLine();
 
 				session.put(ans, g);
+				System.out.println(ans + " " + g);
 			} else {
 				i++;
 			}
 		}
 
 		grade.put(doc, (LinkedHashMap<String, String>) session);
+
+		for (String k : student) {
+			System.out.println(k + " " + session.get(k));
+		}
+
 		System.out.println("The detail have been stored!");
 	}
 
@@ -128,7 +137,9 @@ public class tutorLoadGrade {
 
 			writer.flush();
 			writer.close();
-			System.out.println("The grade for has been successfully exported to " + url);
+			System.out
+					.println("The grade for has been successfully exported to "
+							+ url);
 			return true;
 
 		} catch (IOException e) {
@@ -161,7 +172,9 @@ public class tutorLoadGrade {
 
 			writer.flush();
 			writer.close();
-			System.out.println("The grade for has been successfully exported to " + url);
+			System.out
+					.println("The grade for has been successfully exported to "
+							+ url);
 			return true;
 		} catch (IOException e) {
 			System.out.println("Read File Fail..");
@@ -190,7 +203,8 @@ public class tutorLoadGrade {
 
 			writer.flush();
 			writer.close();
-			System.out.println("The grade for " + courseName + " has been successfully exported to " + url);
+			System.out.println("The grade for " + courseName
+					+ " has been successfully exported to " + url);
 			return true;
 		} catch (IOException e) {
 			System.out.println("Read File Fail..");
@@ -214,21 +228,30 @@ public class tutorLoadGrade {
 				String[] temp = sCurrentLine.split(",");
 
 				if (!student.contains(temp[0])) {
-					System.out.println("Student Not Found");
-					System.out.println("Do you want to add " + temp[0]
-							+ " into the student database? yes | no");
-					Scanner scan = new Scanner(System.in);
-					String ans = scan.nextLine();
+	
 
-					if (ans.equals("Yes") || ans.equals("yes")
-							|| ans.equals("y") || ans.equals("Y")) {
+					boolean chk = false;
+					while (chk == false) {
+						System.out.println("Student Not Found");
+						System.out.println("Do you want to add " + temp[0]
+								+ " into the student database? yes | no");
+						Scanner scan = new Scanner(System.in);
+						String ans = scan.nextLine();
+						if (ans.equals("Yes") || ans.equals("yes")
+								|| ans.equals("y") || ans.equals("Y")) {
 
-						student.add(temp[0]);
-						System.out.println("Student added to database");
-						session.put(temp[0], temp[1]);
+							student.add(temp[0]);
+							System.out.println("Student added to database");
+							session.put(temp[0], temp[1]);
+							chk = true;
 
-					} else {
-						System.out.println("Student grade not added");
+						} else if (ans.equals("No") || ans.equals("no") || ans.equals("N") || ans.equals("n")){
+							System.out.println("Student grade not added");
+							chk = true;
+						} else {
+							System.out.println("Please re-enter the value.");
+							
+						}
 					}
 
 				} else {
@@ -262,20 +285,24 @@ public class tutorLoadGrade {
 
 	}
 
-	
-	
-	public void select(int choice) {
+	public void select(int choice) throws InterruptedException {
 		Scanner scan = new Scanner(System.in);
 		String ans = null;
-		
-		JFrame j = new JFrame();
+
 		switch (choice) {
 		case 1:
 			System.out.println("Enter the file path you want to import?");
+			JFrame j = new JFrame();
 			j.toFront();
 			ans = saveMap(j);
-			j.toBack();
-		
+			j.dispose();
+
+			if (ans == null) {
+				System.out.println("Not file selected. ");
+				System.out.println("Exiting function");
+				printUI();
+				break;
+			}
 
 			System.out.println("Enter the name of the course?");
 			String cs = scan.nextLine();
@@ -302,7 +329,7 @@ public class tutorLoadGrade {
 			displayAllCourseGrade();
 			printUI();
 			break;
-			
+
 		case 5:
 			exportAllGrade();
 			printUI();
@@ -312,49 +339,57 @@ public class tutorLoadGrade {
 			displayStudent();
 			System.out.println("Which student's grade do you want to export?");
 			ans = scan.nextLine();
-			
+
 			exportStudentGrade(ans);
 			printUI();
 			break;
-			
+
 		case 7:
 			displayCourse();
 			System.out.println("Which course grade do you want to export?");
 			ans = scan.nextLine();
-			
+
 			exportGrade(ans);
 			printUI();
 			break;
-			
-		case 8: 
+
+		case 8:
 			displayCourse();
 			System.out.println("Which course do you want to edit?");
 			String c = scan.nextLine();
-			
+
 			displayStudent();
 			System.out.println("Which student do you want to edit the grade?");
 			String s = scan.nextLine();
-			
+
 			System.out.println("What grade is he suppose to have?");
 			ans = scan.nextLine();
-			
+
 			editCourse(c, s, ans);
 			printUI();
 			break;
-			
+
 		case 9:
 			displayCourse();
 			System.out.println("Which course do you want to delete?");
 			ans = scan.nextLine();
-			
+
 			deleteCourse(ans);
 			printUI();
 			break;
-			
+
 		case 0:
-			System.out.println("End Program!");
+			Thread t = new Thread();
+			t.start();
+			System.out.print("Exiting loading function");
+			for (int i = 0; i < 4; i++) {
+				t.sleep(1000);
+				System.out.print(".");
+			}
+			System.out.println("Exit Success.");
+			System.out.println();
 			break;
-			
+
 		default:
 			System.out.println("Invalid Selection");
 			printUI();
@@ -364,34 +399,33 @@ public class tutorLoadGrade {
 
 	}
 
-	public boolean printUI() {
+	public boolean printUI() throws NumberFormatException, InterruptedException {
 		Scanner scan = new Scanner(System.in);
 		int i = 0;
 		System.out.println("Please choose something to do");
-		System.out.println(++i +".\t Import single grades");
-		System.out.println(++i +".\t Manually Insert Grades");
-		System.out.println(++i +".\t View Single Course Grades");
-		System.out.println(++i +".\t View All Course Grades");
-		System.out.println(++i +".\t Export All grades");
-		System.out.println(++i +".\t Export student grades");
-		System.out.println(++i +".\t Export subject grades");
-		System.out.println(++i +".\t Edit student grades");
-		System.out.println(++i +".\t Delete grades");
+		System.out.println(++i + ".\t Import single grades");
+		System.out.println(++i + ".\t Manually Insert Grades");
+		System.out.println(++i + ".\t View Single Course Grades");
+		System.out.println(++i + ".\t View All Course Grades");
+		System.out.println(++i + ".\t Export All grades");
+		System.out.println(++i + ".\t Export student grades");
+		System.out.println(++i + ".\t Export subject grades");
+		System.out.println(++i + ".\t Edit student grades");
+		System.out.println(++i + ".\t Delete grades");
 		System.out.println("0.\t End");
 
 		System.out.println("Select the choice: ");
 		String choice = scan.nextLine();
-		
+
 		if (isInteger(choice)) {
 			select(Integer.parseInt(choice));
 		} else {
 			printUI();
 		}
-		
 
 		return false;
 	}
-	
+
 	public static boolean isInteger(String str) {
 		int size = str.length();
 
@@ -403,26 +437,26 @@ public class tutorLoadGrade {
 
 		return size > 0;
 	}
-	
-    public String saveMap(JFrame f) {
-	    JFileChooser chooser = new JFileChooser();
-	    chooser.setCurrentDirectory(new File("/Users/Derrick/Desktop/School/PSD3/forTest/"));
-	    FileNameExtensionFilter filter = new FileNameExtensionFilter(
-	            "CSV", "csv");
-	    chooser.setFileFilter(filter);
-	    int retrival = chooser.showOpenDialog(f);
-	    if (retrival == JFileChooser.APPROVE_OPTION) {
-	        try {
-	           return chooser.getSelectedFile().getAbsolutePath();
 
-	        } catch (Exception ex) {
-	            ex.printStackTrace();
-	        }
-	    }
-	  
+	public String saveMap(JFrame f) {
+		JFileChooser chooser = new JFileChooser();
+		chooser.setCurrentDirectory(new File(
+				"/Users/Derrick/Desktop/School/PSD3/forTest/"));
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV",
+				"csv");
+		chooser.setFileFilter(filter);
+		int retrival = chooser.showOpenDialog(f);
+		if (retrival == JFileChooser.APPROVE_OPTION) {
+			try {
+				return chooser.getSelectedFile().getAbsolutePath();
+
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+
 		return null;
-	    
-	    
+
 	}
 
 }

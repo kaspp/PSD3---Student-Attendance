@@ -17,13 +17,23 @@ public class StudentAttendance {
 	ArrayList<String> coursen = new ArrayList<String>();
 	Map<String, LinkedHashMap<String, String>> course = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 
-	public void select(int s) {
+	public void select(int s) throws InterruptedException {
 		Scanner scan = new Scanner(System.in);
-		JFrame j = new JFrame();
+
 		switch (s) {
 		case 1:
 			System.out.println("Enter the url for the file you want to import");
+			JFrame j = new JFrame();
+			j.toFront();
 			String url = saveMap(j);
+			j.dispose();
+
+			if (url == null) {
+				System.out.println("Not file selected. ");
+				System.out.println("Exiting function");
+				printUI();
+				break;
+			}
 
 			System.out.println("Enter the name: ");
 			String name = scan.nextLine();
@@ -88,19 +98,28 @@ public class StudentAttendance {
 			displayAttendance(coursea);
 			printUI();
 			break;
-			
+
 		case 7:
 			displayAllCourse();
 			System.out.println("Which lesson do you want to view?");
 			coursea = scan.nextLine();
-			
+
 			viewSA(coursea);
 			printUI();
 			break;
 
 		case 0:
-			System.out.println("Exit program");
+			Thread t = new Thread();
+			t.start();
+			System.out.print("Exiting loading function");
+			for (int i = 0; i < 4; i++) {
+				t.sleep(1000);
+				System.out.print(".");
+			}
+			System.out.println("Exit Success.");
+			System.out.println();
 			break;
+
 		default:
 			System.out.println("Invalid Selection");
 			printUI();
@@ -108,37 +127,35 @@ public class StudentAttendance {
 		}
 	}
 
-	public void printUI() {
+	public void printUI() throws NumberFormatException, InterruptedException {
 
 		int i = 0;
 		Scanner scan = new Scanner(System.in);
 		System.out.println("Please choose something to do");
 		System.out.println(++i + ".\t Import attendance");
 		System.out.println(++i + ".\t Edit attendance");
-		System.out.println(++i +".\t Delete attendance");
-		System.out.println(++i +".\t Show student");
-		System.out.println(++i +".\t Show sessions");
-		System.out.println(++i +".\t Mark Late Student");
+		System.out.println(++i + ".\t Delete attendance");
+		System.out.println(++i + ".\t Show student");
+		System.out.println(++i + ".\t Show sessions");
+		System.out.println(++i + ".\t Mark Late Student");
 		System.out.println(++i + ".\t View Student attendance");
-		
+
 		System.out.println("0.\t Exit Program");
 
 		System.out.println("Select the choice: ");
-		
-		
+
 		String choice = scan.nextLine();
 		if (isInteger(choice)) {
 			select(Integer.parseInt(choice));
 		} else {
 			printUI();
 		}
-		
 
 	}
-	
+
 	public void viewSA(String coursea) {
 		Map<String, String> session = course.get(coursea);
-		
+
 		for (String n : student) {
 			System.out.println(n + " " + session.get(n));
 		}
@@ -222,25 +239,35 @@ public class StudentAttendance {
 
 				} else {
 
-					System.out.println("Student Not Found");
-					
-					System.out.println("Do you want to add " + temp[0]
-							+ " into the student database? yes | no");
-					Scanner scan = new Scanner(System.in);
-					String ans = scan.nextLine();
+			
 
-					if (ans.equals("Yes") || ans.equals("yes")
-							|| ans.equals("y") || ans.equals("Y")) {
-						student.add(temp[0]);
-						System.out.println("Student added to database");
-						session.put(temp[0], temp[1]);
-						System.out.println(temp[0] + " added");
+					boolean chk = false;
+					while (chk == false) {
+						System.out.println("Student Not Found");
 
-					} else {
+						System.out.println("Do you want to add " + temp[0]
+								+ " into the student database? yes | no");
+						Scanner scan = new Scanner(System.in);
+						String ans = scan.nextLine();
+						if (ans.equals("Yes") || ans.equals("yes")
+								|| ans.equals("y") || ans.equals("Y")) {
+							student.add(temp[0]);
+							System.out.println("Student added to database");
+							session.put(temp[0], temp[1]);
+							System.out.println(temp[0] + " added");
+							
+							chk = true;
 
-						System.out
-								.println("Student not added to the database, nor will he be added into this session. "
-										+ "Run the document again.");
+						} else if (ans.equals("No") || ans.equals("no") || ans.equals("N") || ans.equals("n")) {
+
+							System.out
+									.println("Student not added to the database, nor will he be added into this session. "
+											+ "Run the document again.");
+							
+							chk = true;
+						} else {
+							System.out.println("Please try again.");
+						}
 					}
 
 				}
@@ -272,26 +299,26 @@ public class StudentAttendance {
 			System.out.println("Student : " + name);
 		}
 	}
-	
-    public String saveMap(JFrame f) {
-	    JFileChooser chooser = new JFileChooser();
-	    chooser.setCurrentDirectory(new File("/Users/Derrick/Desktop/School/PSD3/forTest/"));
-	    FileNameExtensionFilter filter = new FileNameExtensionFilter(
-	            "CSV", "csv");
-	    chooser.setFileFilter(filter);
-	    int retrival = chooser.showOpenDialog(f);
-	    if (retrival == JFileChooser.APPROVE_OPTION) {
-	        try {
-	           return chooser.getSelectedFile().getAbsolutePath();
 
-	        } catch (Exception ex) {
-	            ex.printStackTrace();
-	        }
-	    }
-	  
+	public String saveMap(JFrame f) {
+		JFileChooser chooser = new JFileChooser();
+		chooser.setCurrentDirectory(new File(
+				"/Users/Derrick/Desktop/School/PSD3/forTest/"));
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV",
+				"csv");
+		chooser.setFileFilter(filter);
+		int retrival = chooser.showOpenDialog(f);
+		if (retrival == JFileChooser.APPROVE_OPTION) {
+			try {
+				return chooser.getSelectedFile().getAbsolutePath();
+
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+
 		return null;
-	    
-	    
+
 	}
 
 	public static boolean isInteger(String str) {

@@ -1,11 +1,10 @@
 import java.util.Scanner;
 
 public class Main {
-	
-	public static void main(String[] args)  throws InterruptedException {
+
+	public static void main(String[] args) throws InterruptedException {
 		// TODO Auto-generated method stub
-		
-	
+
 		StudentAttendance sa = new StudentAttendance();
 		tutorLoadGrade tg = new tutorLoadGrade();
 		int i = 1;
@@ -20,35 +19,35 @@ public class Main {
 			String ans = sc.nextLine();
 			Thread t = new Thread();
 			if (isInteger(ans)) {
-				
+
 				switch (Integer.parseInt(ans)) {
 				case 1:
-					
+
 					t.start();
-					
+
 					for (i = 0; i < 4; i++) {
-						t.sleep(1000);
+						Thread.sleep(100);
 						System.out.print(".");
 					}
-					
+
 					System.out.println("Database not found!");
 					System.out.println();
-					
+
 					tg.printUI();
 					break;
 
 				case 2:
-					
+
 					t.start();
-					
+
 					for (i = 0; i < 4; i++) {
-						t.sleep(1000);
+						Thread.sleep(100);
 						System.out.print(".");
 					}
-					
+
 					System.out.println("Database not found!");
 					System.out.println();
-					
+
 					sa.printUI();
 					break;
 
@@ -56,6 +55,10 @@ public class Main {
 					i = 0;
 					System.out.println("Thank you and Good bye!");
 					break;
+
+				default:
+					System.out.print("Choice error, pls try again!");
+					System.out.println();
 
 				}
 
