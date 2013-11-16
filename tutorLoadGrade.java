@@ -54,7 +54,7 @@ public class tutorLoadGrade {
 		Map<String, String> session = new LinkedHashMap<String, String>();
 		Scanner sc = new Scanner(System.in);
 
-		System.out.println("What document are you grading?");
+		System.out.println("What course are you grading?");
 		String doc = sc.nextLine();
 		course.add(doc);
 
@@ -82,8 +82,10 @@ public class tutorLoadGrade {
 
 				session.put(ans, g);
 				System.out.println(ans + " " + g);
-			} else {
+			} else if (ans.equals("No") || ans.equals("no") || ans.equals("N") || ans.equals("n")) {
 				i++;
+			} else {
+				System.out.println("Invalid request, please try again.");
 			}
 		}
 
@@ -112,8 +114,8 @@ public class tutorLoadGrade {
 		course.remove(c);
 	}
 
-	public boolean exportStudentGrade(String stud) {
-		String url = "/Users/Derrick/Desktop/School/PSD3/forTest/" + stud
+	public boolean exportStudentGrade(String stud, String link) {
+		String url = link + stud
 				+ ".csv";
 		try {
 
@@ -150,8 +152,8 @@ public class tutorLoadGrade {
 
 	}
 
-	public boolean exportAllGrade() {
-		String url = "/Users/Derrick/Desktop/School/PSD3/forTest/all.csv";
+	public boolean exportAllGrade(String link) {
+		String url = link + "all.csv";
 		try {
 
 			FileWriter writer = new FileWriter(url);
@@ -184,9 +186,9 @@ public class tutorLoadGrade {
 
 	}
 
-	public boolean exportGrade(String courseName) {
+	public boolean exportGrade(String courseName, String link) {
 
-		String url = "/Users/Derrick/Desktop/School/PSD3/forTest/" + courseName
+		String url = link + courseName
 				+ ".csv";
 		try {
 
@@ -331,7 +333,10 @@ public class tutorLoadGrade {
 			break;
 
 		case 5:
-			exportAllGrade();
+			System.out.println("Enter the path u want to export the path.");
+			ans = scan.nextLine();
+			
+			exportAllGrade(ans);
 			printUI();
 			break;
 
@@ -339,8 +344,11 @@ public class tutorLoadGrade {
 			displayStudent();
 			System.out.println("Which student's grade do you want to export?");
 			ans = scan.nextLine();
+			
+			System.out.println("Enter the path u want to export the path.");
+			String link = scan.nextLine();
 
-			exportStudentGrade(ans);
+			exportStudentGrade(ans, link);
 			printUI();
 			break;
 
@@ -348,8 +356,11 @@ public class tutorLoadGrade {
 			displayCourse();
 			System.out.println("Which course grade do you want to export?");
 			ans = scan.nextLine();
+			
+			System.out.println("Enter the path u want to export the path.");
+			link = scan.nextLine();
 
-			exportGrade(ans);
+			exportGrade(ans, link);
 			printUI();
 			break;
 
