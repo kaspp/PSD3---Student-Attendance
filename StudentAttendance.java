@@ -58,17 +58,26 @@ public class StudentAttendance {
 
 				if (checkCourse(coursea)) {
 					chk++;
-					getAllStudent();
-					System.out.println("Which Student ");
-					studn = scan.nextLine();
 
 					while (chk == 1) {
+						getAllStudent();
+						System.out.println("Which Student ");
+						studn = scan.nextLine();
 						if (checkStudent(studn)) {
 							chk++;
-							System.out.println("What do you want to update");
-							String update = scan.nextLine();
 
-							editAttendance(studn, coursea, update);
+							while (chk == 2) {
+								System.out
+										.println("What do you want to update (Present | Absent | Late)");
+								String update = scan.nextLine();
+
+								if (update.equals("Present")
+										|| update.equals("Absent")
+										|| update.equals("Late")) {
+									chk++;
+									editAttendance(studn, coursea, update);
+								}
+							}
 						} else {
 							System.out
 									.println("Wrong input, please key in again.");
@@ -191,7 +200,7 @@ public class StudentAttendance {
 		System.out.println(++i + ".\t Mark Late Student");
 		System.out.println(++i + ".\t View Student attendance");
 
-		System.out.println("0.\t Exit Program");
+		System.out.println("0.\t Return to previous menu");
 
 		System.out.println("Select the choice: ");
 
@@ -226,7 +235,7 @@ public class StudentAttendance {
 		Map<String, String> temp = course.get(courseName);
 
 		for (String name : student) {
-			System.out.println(name + " is " + temp.get(name) + " on "
+			System.out.println(name + " is " + temp.get(name) + " for "
 					+ courseName);
 		}
 

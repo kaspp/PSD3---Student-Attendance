@@ -417,10 +417,19 @@ public class tutorLoadGrade {
 						s = scan.nextLine();
 
 						if (checkStudent(s)) {
-							System.out
-									.println("What grade is he suppose to have?");
-							ans = scan.nextLine();
 							chk++;
+							while (chk == 2) {
+							System.out
+									.println("What grade is he suppose to have? (A|B|C|D|E)");
+							ans = scan.nextLine();
+							
+							if (ans.endsWith("A") || ans.endsWith("B") || ans.endsWith("C") ||ans.endsWith("D") || ans.endsWith("E")) {
+								editCourse(c, s, ans);
+							} else {
+								System.out.println("Wrong input, please key in again.");
+							}
+							
+							}
 							
 						} else {
 							System.out.println("Wrong input, please key in again.");
@@ -431,7 +440,7 @@ public class tutorLoadGrade {
 					System.out.println("Wrong input, please key in again.");
 				}
 			}
-			editCourse(c, s, ans);
+			
 			printUI();
 			break;
 
@@ -488,7 +497,7 @@ public class tutorLoadGrade {
 		System.out.println(++i + ".\t Export subject grades");
 		System.out.println(++i + ".\t Edit student grades");
 		System.out.println(++i + ".\t Delete grades");
-		System.out.println("0.\t End");
+		System.out.println("0.\t Return to previous menu");
 
 		System.out.println("Select the choice: ");
 		String choice = scan.nextLine();
