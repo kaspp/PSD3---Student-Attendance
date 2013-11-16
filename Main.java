@@ -57,7 +57,7 @@ public class Main {
 					break;
 
 				default:
-					System.out.print("Choice error, pls try again!");
+					System.out.print("Wrong input, pls try again!");
 					System.out.println();
 
 				}

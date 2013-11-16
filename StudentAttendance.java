@@ -35,7 +35,7 @@ public class StudentAttendance {
 				break;
 			}
 
-			System.out.println("Enter the name: ");
+			System.out.println("Enter the course name: ");
 			String name = scan.nextLine();
 
 			System.out.println("Reading Attendance....");
@@ -48,30 +48,53 @@ public class StudentAttendance {
 			break;
 
 		case 2:
+			int chk = 0;
+			String coursea = null;
+			String studn = null;
+			while (chk == 0) {
+				displayAllCourse();
+				System.out.println("Which Course are you editing?");
+				coursea = scan.nextLine();
 
-			displayAllCourse();
-			System.out.println("Which Course are you editing?");
-			String coursea = scan.nextLine();
+				if (checkCourse(coursea)) {
+					chk++;
+					getAllStudent();
+					System.out.println("Which Student ");
+					studn = scan.nextLine();
 
-			getAllStudent();
-			System.out.println("Which Student ");
-			String studn = scan.nextLine();
+					while (chk == 1) {
+						if (checkStudent(studn)) {
+							chk++;
+							System.out.println("What do you want to update");
+							String update = scan.nextLine();
 
-			System.out.println("What do you want to update");
-			String update = scan.nextLine();
+							editAttendance(studn, coursea, update);
+						} else {
+							System.out
+									.println("Wrong input, please key in again.");
+						}
+					}
+				} else {
+					System.out.println("Wrong input, please key in again.");
+				}
 
-			editAttendance(studn, coursea, update);
+			}
 			printUI();
 			break;
 
 		case 3:
-
-			displayAllCourse();
-			System.out.println("Which course do you want to delete?");
-			coursea = scan.nextLine();
-
-			deleteSession(coursea);
-
+			chk = 0;
+			while (chk == 0) {
+				displayAllCourse();
+				System.out.println("Which course do you want to delete?");
+				coursea = scan.nextLine();
+				if (checkCourse(coursea)) {
+					chk++;
+					deleteSession(coursea);
+				} else {
+					System.out.println("Wrong input, please key in again.");
+				}
+			}
 			printUI();
 			break;
 
@@ -86,25 +109,53 @@ public class StudentAttendance {
 			break;
 
 		case 6:
-			displayAllCourse();
-			System.out.println("Which course is the student from?");
-			coursea = scan.nextLine();
+			chk = 0;
 
-			displayAttendance(coursea);
-			System.out.println("Which student do you want to edit?");
-			studn = scan.nextLine();
+			while (chk == 0) {
+				displayAllCourse();
+				System.out.println("Which course is the student from?");
+				coursea = scan.nextLine();
 
-			markLate(coursea, studn);
-			displayAttendance(coursea);
+				if (checkCourse(coursea)) {
+					chk++;
+					while (chk == 1) {
+						displayAttendance(coursea);
+						System.out
+								.println("Which student do you want to edit?");
+						studn = scan.nextLine();
+
+						if (checkStudent(studn)) {
+							chk++;
+							markLate(coursea, studn);
+							displayAttendance(coursea);
+						} else {
+							System.out
+									.println("Wrong input, please key in again.");
+						}
+					}
+				} else {
+					System.out.println("Wrong input, please key in again.");
+				}
+			}
 			printUI();
 			break;
 
 		case 7:
-			displayAllCourse();
-			System.out.println("Which lesson do you want to view?");
-			coursea = scan.nextLine();
 
-			viewSA(coursea);
+			chk = 0;
+
+			while (chk == 0) {
+				displayAllCourse();
+				System.out.println("Which lesson do you want to view?");
+				coursea = scan.nextLine();
+
+				if (checkCourse(coursea)) {
+					chk++;
+					viewSA(coursea);
+				} else {
+					System.out.println("Wrong input, please key in again.");
+				}
+			}
 			printUI();
 			break;
 
@@ -113,7 +164,7 @@ public class StudentAttendance {
 			t.start();
 			System.out.print("Exiting loading function");
 			for (int i = 0; i < 4; i++) {
-				t.sleep(1000);
+				Thread.sleep(1000);
 				System.out.print(".");
 			}
 			System.out.println("Exit Success.");
@@ -239,8 +290,6 @@ public class StudentAttendance {
 
 				} else {
 
-			
-
 					boolean chk = false;
 					while (chk == false) {
 						System.out.println("Student Not Found");
@@ -255,15 +304,16 @@ public class StudentAttendance {
 							System.out.println("Student added to database");
 							session.put(temp[0], temp[1]);
 							System.out.println(temp[0] + " added");
-							
+
 							chk = true;
 
-						} else if (ans.equals("No") || ans.equals("no") || ans.equals("N") || ans.equals("n")) {
+						} else if (ans.equals("No") || ans.equals("no")
+								|| ans.equals("N") || ans.equals("n")) {
 
 							System.out
 									.println("Student not added to the database, nor will he be added into this session. "
 											+ "Run the document again.");
-							
+
 							chk = true;
 						} else {
 							System.out.println("Please try again.");
@@ -331,5 +381,13 @@ public class StudentAttendance {
 		}
 
 		return size > 0;
+	}
+
+	public boolean checkStudent(String name) {
+		return (student.contains(name));
+	}
+
+	public boolean checkCourse(String name) {
+		return (coursen.contains(name));
 	}
 }

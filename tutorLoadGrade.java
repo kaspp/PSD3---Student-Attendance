@@ -82,7 +82,8 @@ public class tutorLoadGrade {
 
 				session.put(ans, g);
 				System.out.println(ans + " " + g);
-			} else if (ans.equals("No") || ans.equals("no") || ans.equals("N") || ans.equals("n")) {
+			} else if (ans.equals("No") || ans.equals("no") || ans.equals("N")
+					|| ans.equals("n")) {
 				i++;
 			} else {
 				System.out.println("Invalid request, please try again.");
@@ -115,8 +116,7 @@ public class tutorLoadGrade {
 	}
 
 	public boolean exportStudentGrade(String stud, String link) {
-		String url = link + stud
-				+ ".csv";
+		String url = link + stud + ".csv";
 		try {
 
 			FileWriter writer = new FileWriter(url);
@@ -188,8 +188,7 @@ public class tutorLoadGrade {
 
 	public boolean exportGrade(String courseName, String link) {
 
-		String url = link + courseName
-				+ ".csv";
+		String url = link + courseName + ".csv";
 		try {
 
 			FileWriter writer = new FileWriter(url);
@@ -230,7 +229,6 @@ public class tutorLoadGrade {
 				String[] temp = sCurrentLine.split(",");
 
 				if (!student.contains(temp[0])) {
-	
 
 					boolean chk = false;
 					while (chk == false) {
@@ -247,12 +245,13 @@ public class tutorLoadGrade {
 							session.put(temp[0], temp[1]);
 							chk = true;
 
-						} else if (ans.equals("No") || ans.equals("no") || ans.equals("N") || ans.equals("n")){
+						} else if (ans.equals("No") || ans.equals("no")
+								|| ans.equals("N") || ans.equals("n")) {
 							System.out.println("Student grade not added");
 							chk = true;
 						} else {
 							System.out.println("Please re-enter the value.");
-							
+
 						}
 					}
 
@@ -301,7 +300,6 @@ public class tutorLoadGrade {
 
 			if (ans == null) {
 				System.out.println("Not file selected. ");
-				System.out.println("Exiting function");
 				printUI();
 				break;
 			}
@@ -319,11 +317,22 @@ public class tutorLoadGrade {
 			break;
 
 		case 3:
-			displayCourse();
-			System.out.println("Enter the course you want to view!");
-			ans = scan.nextLine();
+			int chk = 0;
+			while (chk == 0) {
+				displayCourse();
 
-			displayCourseGrade(ans);
+				System.out.println("Enter the course you want to view!");
+				ans = scan.nextLine();
+
+				if (checkCourse(ans)) {
+					displayCourseGrade(ans);
+					chk++;
+				} else {
+					System.out.println("Wrong input, please key in again.");
+				}
+
+			}
+
 			printUI();
 			break;
 
@@ -335,57 +344,113 @@ public class tutorLoadGrade {
 		case 5:
 			System.out.println("Enter the path u want to export the path.");
 			ans = scan.nextLine();
-			
+
 			exportAllGrade(ans);
 			printUI();
 			break;
 
 		case 6:
-			displayStudent();
-			System.out.println("Which student's grade do you want to export?");
-			ans = scan.nextLine();
-			
-			System.out.println("Enter the path u want to export the path.");
-			String link = scan.nextLine();
+
+			String link = null;
+			chk = 0;
+
+			while (chk == 0) {
+				displayStudent();
+				System.out
+						.println("Which student's grade do you want to export?");
+				ans = scan.nextLine();
+
+				if (checkStudent(ans)) {
+					chk++;
+					System.out
+							.println("Enter the path u want to export the path.");
+					link = scan.nextLine();
+
+				} else {
+					System.out.println("Wrong input, please key in again.");
+				}
+			}
 
 			exportStudentGrade(ans, link);
 			printUI();
 			break;
 
 		case 7:
-			displayCourse();
-			System.out.println("Which course grade do you want to export?");
-			ans = scan.nextLine();
-			
-			System.out.println("Enter the path u want to export the path.");
-			link = scan.nextLine();
+			chk = 0;
 
-			exportGrade(ans, link);
+			while (chk == 0) {
+				displayCourse();
+				System.out.println("Which course grade do you want to export?");
+				ans = scan.nextLine();
+
+				if (checkCourse(ans)) {
+					chk++;
+					System.out
+							.println("Enter the path u want to export the path.");
+					link = scan.nextLine();
+
+					exportGrade(ans, link);
+				} else {
+					System.out.println("Wrong input, please key in again.");
+				}
+			}
 			printUI();
 			break;
 
 		case 8:
-			displayCourse();
-			System.out.println("Which course do you want to edit?");
-			String c = scan.nextLine();
+			chk = 0;
+			String s = null,
+			c = null;
+			while (chk == 0) {
+				displayCourse();
+				System.out.println("Which course do you want to edit?");
+				c = scan.nextLine();
 
-			displayStudent();
-			System.out.println("Which student do you want to edit the grade?");
-			String s = scan.nextLine();
+				if (checkCourse(c)) {
+					chk++;
 
-			System.out.println("What grade is he suppose to have?");
-			ans = scan.nextLine();
+					while (chk == 1) {
 
+						displayStudent();
+						System.out
+								.println("Which student do you want to edit the grade?");
+						s = scan.nextLine();
+
+						if (checkStudent(s)) {
+							System.out
+									.println("What grade is he suppose to have?");
+							ans = scan.nextLine();
+							chk++;
+							
+						} else {
+							System.out.println("Wrong input, please key in again.");
+						}
+					}
+
+				}else {
+					System.out.println("Wrong input, please key in again.");
+				}
+			}
 			editCourse(c, s, ans);
 			printUI();
 			break;
 
 		case 9:
-			displayCourse();
-			System.out.println("Which course do you want to delete?");
-			ans = scan.nextLine();
 
-			deleteCourse(ans);
+			chk = 0;
+
+			while (chk == 0) {
+				displayCourse();
+				System.out.println("Which course do you want to delete?");
+				ans = scan.nextLine();
+
+				if (checkCourse(ans)) {
+					chk++;
+					deleteCourse(ans);
+				}else {
+					System.out.println("Wrong input, please key in again.");
+				}
+			}
 			printUI();
 			break;
 
@@ -394,7 +459,7 @@ public class tutorLoadGrade {
 			t.start();
 			System.out.print("Exiting loading function");
 			for (int i = 0; i < 4; i++) {
-				t.sleep(1000);
+				Thread.sleep(1000);
 				System.out.print(".");
 			}
 			System.out.println("Exit Success.");
@@ -470,4 +535,11 @@ public class tutorLoadGrade {
 
 	}
 
+	public boolean checkStudent(String name) {
+		return (student.contains(name));
+	}
+
+	public boolean checkCourse(String name) {
+		return (course.contains(name));
+	}
 }
