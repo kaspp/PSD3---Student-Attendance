@@ -214,9 +214,25 @@ public class tutorLoadGrade {
 		}
 	}
 
-	public boolean importGrade(String courseName, String url) {
+	public boolean importGrade() {
 		Map<String, String> session = new LinkedHashMap<String, String>();
+		Scanner scan = new Scanner(System.in);
+		
+		System.out.println("Enter the file path you want to import?");
+		JFrame j = new JFrame();
+		j.toFront();
+		String url = saveMap(j);
+		j.dispose();
 
+		if (url == null) {
+			System.out.println("Not file selected. ");
+			return false;
+		}
+
+		System.out.println("Enter the name of the course?");
+		String cs = scan.nextLine();
+		
+		
 		BufferedReader br = null;
 
 		try {
@@ -235,7 +251,7 @@ public class tutorLoadGrade {
 						System.out.println("Student Not Found");
 						System.out.println("Do you want to add " + temp[0]
 								+ " into the student database? yes | no");
-						Scanner scan = new Scanner(System.in);
+						scan = new Scanner(System.in);
 						String ans = scan.nextLine();
 						if (ans.equals("Yes") || ans.equals("yes")
 								|| ans.equals("y") || ans.equals("Y")) {
@@ -261,8 +277,8 @@ public class tutorLoadGrade {
 				}
 			}
 
-			course.add(courseName);
-			grade.put(courseName, (LinkedHashMap<String, String>) session);
+			course.add(cs);
+			grade.put(cs, (LinkedHashMap<String, String>) session);
 			System.out.println("The grade has been entered into the system!");
 
 			return true;
@@ -292,22 +308,9 @@ public class tutorLoadGrade {
 
 		switch (choice) {
 		case 1:
-			System.out.println("Enter the file path you want to import?");
-			JFrame j = new JFrame();
-			j.toFront();
-			ans = saveMap(j);
-			j.dispose();
+			
 
-			if (ans == null) {
-				System.out.println("Not file selected. ");
-				printUI();
-				break;
-			}
-
-			System.out.println("Enter the name of the course?");
-			String cs = scan.nextLine();
-
-			importGrade(cs, ans);
+			importGrade();
 			printUI();
 			break;
 

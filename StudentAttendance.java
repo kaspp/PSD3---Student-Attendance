@@ -22,25 +22,9 @@ public class StudentAttendance {
 
 		switch (s) {
 		case 1:
-			System.out.println("Enter the url for the file you want to import");
-			JFrame j = new JFrame();
-			j.toFront();
-			String url = saveMap(j);
-			j.dispose();
+			
 
-			if (url == null) {
-				System.out.println("Not file selected. ");
-				System.out.println("Exiting function");
-				printUI();
-				break;
-			}
-
-			System.out.println("Enter the course name: ");
-			String name = scan.nextLine();
-
-			System.out.println("Reading Attendance....");
-
-			if (!ReadAttendance(name, url)) {
+			if (!ReadAttendance()) {
 				System.out.println("Read fail");
 			}
 
@@ -276,9 +260,26 @@ public class StudentAttendance {
 		}
 	}
 
-	public boolean ReadAttendance(String courseName, String url) {
+	public boolean ReadAttendance() {
 		Map<String, String> session = new LinkedHashMap<String, String>();
+		Scanner scan = new Scanner(System.in);
+		
+		System.out.println("Enter the url for the file you want to import");
+		JFrame j = new JFrame();
+		j.toFront();
+		String url = saveMap(j);
+		j.dispose();
 
+		if (url == null) {
+			System.out.println("Not file selected. ");
+			System.out.println("Exiting function");
+			return false;
+		}
+
+		System.out.println("Enter the course name: ");
+		String name = scan.nextLine();
+
+		System.out.println("Reading Attendance....");
 		// initStudent();
 
 		BufferedReader br = null;
@@ -305,7 +306,7 @@ public class StudentAttendance {
 
 						System.out.println("Do you want to add " + temp[0]
 								+ " into the student database? yes | no");
-						Scanner scan = new Scanner(System.in);
+						scan = new Scanner(System.in);
 						String ans = scan.nextLine();
 						if (ans.equals("Yes") || ans.equals("yes")
 								|| ans.equals("y") || ans.equals("Y")) {
@@ -332,8 +333,8 @@ public class StudentAttendance {
 				}
 
 			}
-			coursen.add(courseName);
-			course.put(courseName, (LinkedHashMap<String, String>) session);
+			coursen.add(name);
+			course.put(name, (LinkedHashMap<String, String>) session);
 			System.out.println("Attendance Added!");
 			System.out.println();
 			System.out.println();

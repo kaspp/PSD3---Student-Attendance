@@ -53,6 +53,7 @@ public class Main {
 
 				case 3:
 					i = 0;
+					
 					System.out.println("Thank you and Good bye!");
 					break;
 
