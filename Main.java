@@ -1,84 +1,116 @@
 import java.util.Scanner;
+import java.util.*;
 
 public class Main {
+
+	static ArrayList<String> user = new ArrayList<String>();
+	static Map<String, String> pwd = new LinkedHashMap<String, String>();
+	static Map<String, String> role = new LinkedHashMap<String, String>();
 
 	public static void main(String[] args) throws InterruptedException {
 		// TODO Auto-generated method stub
 
+		
+		initUser();
+		
 		StudentAttendance sa = new StudentAttendance();
 		tutorLoadGrade tg = new tutorLoadGrade();
-		int i = 1;
+		int chk = 3, func = 0;;
 		Scanner sc = new Scanner(System.in);
-
-		while (i != 0) {
-			System.out.println("Please choose what you want to do?");
-			System.out.println("1.\t Grades");
-			System.out.println("2.\t Attendance");
-			System.out.println("3.\t Exit");
-
-			String ans = sc.nextLine();
-			Thread t = new Thread();
-			if (isInteger(ans)) {
-
-				switch (Integer.parseInt(ans)) {
-				case 1:
-
-					t.start();
-
-					for (i = 0; i < 4; i++) {
-						Thread.sleep(100);
-						System.out.print(".");
-					}
-
-					System.out.println("Database not found!");
-					System.out.println();
-
-					tg.printUI();
-					break;
-
-				case 2:
-
-					t.start();
-
-					for (i = 0; i < 4; i++) {
-						Thread.sleep(100);
-						System.out.print(".");
-					}
-
-					System.out.println("Database not found!");
-					System.out.println();
-
-					sa.printUI();
-					break;
-
-				case 3:
-					i = 0;
-					
-					System.out.println("Thank you and Good bye!");
-					break;
-
-				default:
-					System.out.print("Wrong input, pls try again!");
-					System.out.println();
-
-				}
-
+		System.out.println("Please enter your username");
+		while (func == 0 && chk != 0) {
+			if (chk < 3) {
+				System.out
+				.println("The username is not found. Please try again. ");
 			}
+			
+			String name = sc.nextLine();
 
+			if (checkUser(name)) {
+				System.out.println("User found, please enter your password. ");
+				func++;
+				chk = 3;
+				
+				while (func == 1 && chk != 0) {
+					
+					if (chk < 3) {
+						System.out.println("The password you typed is incorrect, please try again.");
+					}
+					
+					System.out.println(chk);
+					String pwd = sc.nextLine();
+					
+					if (checkPwd(name, pwd)) {
+						func++;
+						
+						if (checkRole(name).equals("Admin")) {
+							tg.printUI();
+							chk = 0;
+							break;
+						} else if (checkRole(name).equals("Tutor")) {
+							sa.printUI();
+							chk = 0;
+							break;
+						}
+						
+					} else {
+						chk --;
+						
+						if (chk == 0) {
+							System.out.println("You have exceeded your tries. Please do it later.");
+						}
+						
+					}
+				}
+			} else {
+				chk--;
+				
+				if (chk == 0) {
+					System.out.println("You have exceeded your tries. Please do it later.");
+				}
+				
+			}
 		}
-
 	}
 
-	public static boolean isInteger(String str) {
-		int size = str.length();
-
-		for (int i = 0; i < size; i++) {
-			if (!Character.isDigit(str.charAt(i))) {
-				return false;
+	public static boolean checkUser(String name) {
+		for (String k : user) {
+			if (k.equals(name)) {
+				return true;
 			}
 		}
 
-		return size > 0;
+		return false;
+	}
+
+	public static boolean checkPwd(String u, String p) {
+		return (pwd.get(u).equals(p));
+	}
+	
+	public static String checkRole(String u) {
+		return (role.get(u));
+	}
+	
+	public static void initUser() {
+		user.add("Derrick");
+		pwd.put("Derrick", "derrick");
+		role.put("Derrick", "Admin");
+		
+		user.add("Reuben");
+		pwd.put("Reuben", "reuben");
+		role.put("Reuben", "Tutor");
+		
+		user.add("Jason");
+		pwd.put("Jason", "jason");
+		role.put("Jason", "Admin");
+		
+		user.add("Kevin");
+		pwd.put("Kevin", "kevin");
+		role.put("Kevin", "Tutor");
+		
+		user.add("NgaiFong");
+		pwd.put("NgaiFong", "ngaifong");
+		role.put("NgaiFong", "Tutor");
 	}
 
 }

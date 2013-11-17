@@ -469,11 +469,12 @@ public class tutorLoadGrade {
 		case 0:
 			Thread t = new Thread();
 			t.start();
-			System.out.print("Exiting loading function");
+			System.out.print("Exiting Program");
 			for (int i = 0; i < 4; i++) {
 				Thread.sleep(1000);
 				System.out.print(".");
 			}
+			System.out.println();
 			System.out.println("Exit Success.");
 			System.out.println();
 			break;
@@ -500,7 +501,7 @@ public class tutorLoadGrade {
 		System.out.println(++i + ".\t Export subject grades");
 		System.out.println(++i + ".\t Edit student grades");
 		System.out.println(++i + ".\t Delete grades");
-		System.out.println("0.\t Return to previous menu");
+		System.out.println("0.\t Exit Program");
 
 		System.out.println("Select the choice: ");
 		String choice = scan.nextLine();
