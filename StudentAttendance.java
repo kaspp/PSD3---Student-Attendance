@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -13,8 +14,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class StudentAttendance {
 
-	ArrayList<String> student = new ArrayList<String>();
+	ArrayList<String> studentid = new ArrayList<String>();
 	ArrayList<String> coursen = new ArrayList<String>();
+
+	Map<String, String> studentName = new LinkedHashMap<String, String>();
+	Map<String, String> studentSur = new LinkedHashMap<String, String>();
 	Map<String, LinkedHashMap<String, String>> course = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 
 	public void select(int s) throws InterruptedException {
@@ -150,9 +154,17 @@ public class StudentAttendance {
 			}
 			printUI();
 			break;
-			
+
 		case 8:
 			mInsertAttendance();
+			printUI();
+			break;
+
+		case 9:
+			System.out.println("The path you want to export your file to?");
+			String url = scan.nextLine();
+
+			exportData(url);
 			printUI();
 			break;
 
@@ -189,6 +201,7 @@ public class StudentAttendance {
 		System.out.println(++i + ".\t Mark Late Student");
 		System.out.println(++i + ".\t View Student attendance");
 		System.out.println(++i + ".\t Manually Mark Attendance");
+		System.out.println(++i + ".\t Export All Attendance");
 
 		System.out.println("0.\t Exit Program");
 
@@ -203,10 +216,65 @@ public class StudentAttendance {
 
 	}
 
+	public boolean exportData(String link) {
+		String url = link + "/all.csv";
+		try {
+
+			FileWriter writer = new FileWriter(url);
+
+			writer.append("Student Name,Student Surname,ID, ");
+
+			int count = 0;
+			for (String c : coursen) {
+				writer.append(c);
+				if (count != coursen.size() - 1) {
+					writer.append(",");
+				}
+				count++;
+			}
+
+			writer.append("\n");
+
+			for (String id : studentid) {
+				writer.append(studentName.get(id) + "," + studentSur.get(id)
+						+ "," + id + ",");
+
+				for (int i = 0; i < coursen.size(); i++) {
+					//System.out.println(i);
+					Map<String, String> session = course
+							.get(coursen.get(i));
+					if (i != coursen.size() - 1) {
+						writer.append(session.get(id) + ",");
+						
+					} else {
+						writer.append(session.get(id));
+						
+					}
+
+				}
+
+				writer.append("\n");
+			}
+			// generate whatever data you want
+
+			writer.flush();
+			writer.close();
+			System.out
+					.println("The grade for has been successfully exported to "
+							+ url);
+			return true;
+
+		} catch (IOException e) {
+			System.out.println("Read File Fail..");
+			return false;
+
+		}
+	}
+
 	public void viewSA(String coursea) {
 		Map<String, String> session = course.get(coursea);
 
-		for (String n : student) {
+		for (String n : studentid) {
 			System.out.println(n + " " + session.get(n));
 		}
 	}
@@ -224,8 +292,9 @@ public class StudentAttendance {
 	public void displayAttendance(String courseName) {
 		Map<String, String> temp = course.get(courseName);
 
-		for (String name : student) {
-			System.out.println(name + " is " + temp.get(name) + " for "
+		for (String name : studentid) {
+			System.out.println(studentName.get(name) + ", "
+					+ studentSur.get(name) + " is " + temp.get(name) + " for "
 					+ courseName);
 		}
 
@@ -265,10 +334,11 @@ public class StudentAttendance {
 
 		System.out.println("Please take attendance");
 		coursen.add(name);
-		for (String studn : student) {
+		for (String studn : studentid) {
 			int chk = 0;
 			while (chk == 0) {
-				System.out.println(studn + " is ");
+				System.out.println(studentName.get(name) + ", "
+						+ studentSur.get(name) + " is ");
 				System.out.println("1.\t Present");
 				System.out.println("2.\t Absent");
 				System.out.println("3.\t Late");
@@ -276,23 +346,23 @@ public class StudentAttendance {
 				String att = scan.nextLine();
 
 				if (isInteger(att)) {
-					
+
 					switch (Integer.parseInt(att)) {
 					case 1:
 						session.put(studn, "Present");
 						chk++;
 						break;
-						
+
 					case 2:
 						session.put(studn, "Absent");
 						chk++;
 						break;
-						
+
 					case 3:
-						session.put(studn,  "Late");
+						session.put(studn, "Late");
 						chk++;
 						break;
-						
+
 					default:
 						System.out.println("Wrong choice, please try again.");
 						break;
@@ -300,11 +370,11 @@ public class StudentAttendance {
 				}
 			}
 		}
-		
+
 		course.put(name, (LinkedHashMap<String, String>) session);
 	}
 
-	public boolean ReadAttendance() {
+	public boolean ReadAttendance() throws InterruptedException {
 		Map<String, String> session = new LinkedHashMap<String, String>();
 		Scanner scan = new Scanner(System.in);
 
@@ -324,7 +394,11 @@ public class StudentAttendance {
 		String name = scan.nextLine();
 
 		System.out.println("Reading Attendance....");
-		// initStudent();
+		Thread t = new Thread();
+		for (int i = 0; i < 4; i++) {
+			Thread.sleep(1000);
+			System.out.print(".");
+		}
 
 		BufferedReader br = null;
 
@@ -337,7 +411,7 @@ public class StudentAttendance {
 
 				String[] temp = sCurrentLine.split(",");
 
-				if (student.contains(temp[0])) {
+				if (studentid.contains(temp[0])) {
 
 					session.put(temp[0], temp[1]);
 					System.out.println(temp[0] + " added");
@@ -354,7 +428,19 @@ public class StudentAttendance {
 						String ans = scan.nextLine();
 						if (ans.equals("Yes") || ans.equals("yes")
 								|| ans.equals("y") || ans.equals("Y")) {
-							student.add(temp[0]);
+							studentid.add(temp[0]);
+
+							System.out
+									.println("What is the name of the student?");
+							String fn = scan.nextLine();
+
+							System.out
+									.println("What is the surname of the student?");
+							String sn = scan.nextLine();
+
+							studentName.put(temp[0], fn);
+							studentSur.put(temp[0], sn);
+
 							System.out.println("Student added to database");
 							session.put(temp[0], temp[1]);
 							System.out.println(temp[0] + " added");
@@ -399,8 +485,9 @@ public class StudentAttendance {
 	}
 
 	public void getAllStudent() {
-		for (String name : student) {
-			System.out.println("Student : " + name);
+		for (String name : studentid) {
+			System.out.println("Student : " + studentName.get(name) + ", "
+					+ studentSur.get(name));
 		}
 	}
 
@@ -438,7 +525,7 @@ public class StudentAttendance {
 	}
 
 	public boolean checkStudent(String name) {
-		return (student.contains(name));
+		return (studentid.contains(name));
 	}
 
 	public boolean checkCourse(String name) {
