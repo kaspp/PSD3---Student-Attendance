@@ -22,7 +22,6 @@ public class StudentAttendance {
 
 		switch (s) {
 		case 1:
-			
 
 			if (!ReadAttendance()) {
 				System.out.println("Read fail");
@@ -151,6 +150,11 @@ public class StudentAttendance {
 			}
 			printUI();
 			break;
+			
+		case 8:
+			mInsertAttendance();
+			printUI();
+			break;
 
 		case 0:
 			Thread t = new Thread();
@@ -184,6 +188,7 @@ public class StudentAttendance {
 		System.out.println(++i + ".\t Show sessions");
 		System.out.println(++i + ".\t Mark Late Student");
 		System.out.println(++i + ".\t View Student attendance");
+		System.out.println(++i + ".\t Manually Mark Attendance");
 
 		System.out.println("0.\t Exit Program");
 
@@ -251,20 +256,58 @@ public class StudentAttendance {
 		}
 	}
 
-	public void initStudent() {
-		for (int i = 1; i < 11; i++) {
-			if (i < 10)
-				if (!student.contains("00" + i))
-					student.add("00" + i);
-				else if (!student.contains("0" + i))
-					student.add("0" + i);
+	public void mInsertAttendance() {
+		Map<String, String> session = new LinkedHashMap<String, String>();
+		Scanner scan = new Scanner(System.in);
+
+		System.out.println("What course are you taking attendance for?");
+		String name = scan.nextLine();
+
+		System.out.println("Please take attendance");
+		coursen.add(name);
+		for (String studn : student) {
+			int chk = 0;
+			while (chk == 0) {
+				System.out.println(studn + " is ");
+				System.out.println("1.\t Present");
+				System.out.println("2.\t Absent");
+				System.out.println("3.\t Late");
+
+				String att = scan.nextLine();
+
+				if (isInteger(att)) {
+					
+					switch (Integer.parseInt(att)) {
+					case 1:
+						session.put(studn, "Present");
+						chk++;
+						break;
+						
+					case 2:
+						session.put(studn, "Absent");
+						chk++;
+						break;
+						
+					case 3:
+						session.put(studn,  "Late");
+						chk++;
+						break;
+						
+					default:
+						System.out.println("Wrong choice, please try again.");
+						break;
+					}
+				}
+			}
 		}
+		
+		course.put(name, (LinkedHashMap<String, String>) session);
 	}
 
 	public boolean ReadAttendance() {
 		Map<String, String> session = new LinkedHashMap<String, String>();
 		Scanner scan = new Scanner(System.in);
-		
+
 		System.out.println("Enter the url for the file you want to import");
 		JFrame j = new JFrame();
 		j.toFront();

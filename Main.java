@@ -56,6 +56,7 @@ public class Main {
 							tg.printUI();
 							chk = 0;
 							break;
+							
 						} else if (checkRole(name).equals("Tutor")) {
 							
 							Thread t = new Thread();
