@@ -1,4 +1,3 @@
-import java.util.Scanner;
 import java.util.*;
 
 public class Main {
@@ -37,17 +36,39 @@ public class Main {
 						System.out.println("The password you typed is incorrect, please try again.");
 					}
 					
-					System.out.println(chk);
 					String pwd = sc.nextLine();
 					
 					if (checkPwd(name, pwd)) {
 						func++;
 						
 						if (checkRole(name).equals("Admin")) {
+							
+							Thread t = new Thread();
+							t.start();
+							System.out.print("User found. Loading Menu, please wait");
+							for (int i = 0; i < 4; i++) {
+								Thread.sleep(1000);
+								System.out.print(".");
+							}
+							
+							System.out.println();
+							System.out.println("Menu successfully loaded. \n");
 							tg.printUI();
 							chk = 0;
 							break;
 						} else if (checkRole(name).equals("Tutor")) {
+							
+							Thread t = new Thread();
+							t.start();
+							System.out.print("User found. Loading Menu, please wait");
+							for (int i = 0; i < 4; i++) {
+								Thread.sleep(1000);
+								System.out.print(".");
+							}
+							
+							System.out.println();
+							System.out.println("Menu successfully loaded. \n");
+							
 							sa.printUI();
 							chk = 0;
 							break;

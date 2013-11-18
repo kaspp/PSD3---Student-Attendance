@@ -491,7 +491,7 @@ public class tutorLoadGrade {
 	public boolean printUI() throws NumberFormatException, InterruptedException {
 		Scanner scan = new Scanner(System.in);
 		int i = 0;
-		System.out.println("Please choose something to do");
+		System.out.println("Please choose something to do?");
 		System.out.println(++i + ".\t Import single grades");
 		System.out.println(++i + ".\t Manually Insert Grades");
 		System.out.println(++i + ".\t View Single Course Grades");
